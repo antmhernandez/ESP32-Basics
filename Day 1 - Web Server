@@ -1,0 +1,83 @@
+Day 1 – Web Server 
+
+ 
+
+A web server = combination of hardware and software responsible for maintaining, fetching, and serving web pages to Clients. 
+
+Client = a user or software that makes a request from a webpage. 
+
+A Web Client makes a “Request”. The Web Server delivers a “Web Page” to the Client. 
+
+The Web Server continues “listening” for a request.  
+
+If the requested page is not found, the server responds with an  
+
+“HTTP 404 Error”, “Page not found.” 
+
+ 
+
+Web Page(Site)  = single hypertext document (transmitted as HTML) on the World Wide Web.  
+
+This may include hyperlinks to or from other webpages. 
+
+Web Browser = software that renders and displays a web page. 
+
+ 
+
+Our business this week will be to serve up web pages from the ESP32 microcontrol board. 
+
+ESP32 Documentation from Espressif: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/get-started/  
+
+ 
+
+To build webpages, the HTML language is employed. 
+
+HTML = Hypertext Markup Language; It defines the meaning and structure of web content.  
+
+“Hypertext” refers to the ability to link other webpages via text URLs. 
+
+URL = Uniform (Universal) Resource Locator; the address of a resource on the internet that consists of the communication protocol (HTTP or HTTPS) followed by the name or address of a computer on the network, often also including locating information such as directory and file names. 
+
+The ESP32 Wi-Fi Module operates in 3 Operating Modes: 
+
+Station Mode (STA) 
+
+Module connects to existing WiFi Network, setup by a Wireless Router. 
+
+The ESP32 Wi-Fi Module connects to an existing Wi-Fi Network or Router using the router’s SSID and Password. The Router then assigns a local IP Address for the ESP32. 
+
+IP = Internet Protocol; the set of rules for routing and addressing packets of data for travel across networks to ensure that they arrive properly at their destination. Data traversing the internet is partitioned into pieces called “Packets”. 
+
+Our Mobile Phones and Laptops connect using Station Mode. 
+
+Soft Access Point Mode (AP) 
+
+The ESP32 Module creates its own WiFi Network, like a wireless Router, so that other stations like Mobile Phones, other ESP32s, etc. Can connect to that network. 
+
+In Soft Access Point Mode (AP), the ESP32 does not have a Wired Ethernet connection to the internet. 
+
+While configuring the ESP32 in AP Mode, set the SSID and PW for the network so that other devices can connect to that network using the credentials chosen. 
+
+Station + Soft AP Mode 
+
+Combination of Station Mode and Soft AP Mode. The ESP32 acts as both the Station (connecting to a Wifi Network) and an Access Point (serving internet). 
+
+Try it! 
+
+Load code to the ESP32 (separately) for both: (https://www.electronicshub.org/esp32-web-server/)  
+
+Station Mode 
+
+Wire the ESP32 as follows: Pin 21 to red LED +, Pin 22 to green LED +, both to GND. 
+
+https://gist.github.com/elktros/a39d167e55625396ad6df57b89b00ca7#file-esp32-web-server-ino  
+
+Change SSID and PW. 
+
+ 
+
+Read through Code. Comprehend each piece with Walkthrough. 
+
+Soft Access Point Mode 
+
+https://randomnerdtutorials.com/esp32-access-point-ap-web-server/  
