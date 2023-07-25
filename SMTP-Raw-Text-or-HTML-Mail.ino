@@ -1,14 +1,3 @@
-/*
-  Rui Santos
-  Complete project details at:
-   - ESP32: https://RandomNerdTutorials.com/esp32-send-email-smtp-server-arduino-ide/
-   - ESP8266: https://RandomNerdTutorials.com/esp8266-nodemcu-send-email-smtp-server-arduino/
-  
-  Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files.
-  The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-  Example adapted from: https://github.com/mobizt/ESP-Mail-Client
-*/
-
 #include <Arduino.h>
 #if defined(ESP32)
   #include <WiFi.h>
@@ -17,16 +6,16 @@
 #endif
 #include <ESP_Mail_Client.h>
 
-#define WIFI_SSID "REPLACE_WITH_YOUR_SSID"
-#define WIFI_PASSWORD "REPLACE_WITH_YOUR_PASSWORD"
+#define WIFI_SSID "REPLACE_WITH_YOUR_SSID"          //This is the SSID of the Network to which the ESP32 will connect as a Station for service.
+#define WIFI_PASSWORD "REPLACE_WITH_YOUR_PASSWORD"  //This is the Password of the Network to which the ESP32 will connect.
 
 /** The smtp host name e.g. smtp.gmail.com for GMail or smtp.office365.com for Outlook or smtp.mail.yahoo.com */
 #define SMTP_HOST "smtp.gmail.com"
 #define SMTP_PORT 465
 
 /* The sign in credentials */
-#define AUTHOR_EMAIL "YOUR_EMAIL@XXXX.com"
-#define AUTHOR_PASSWORD "YOUR_EMAIL_APP_PASS"
+#define AUTHOR_EMAIL "YOUR_EMAIL@XXXX.com"    //DO NOT use your personal email in case of errors. This is the App-Password email
+#define AUTHOR_PASSWORD "YOUR_EMAIL_APP_PASS"  //App Password associated with your messaging email address.
 
 /* Recipient's email*/
 #define RECIPIENT_EMAIL "RECIPIENTE_EMAIL@XXXX.com"
@@ -45,7 +34,7 @@ void setup(){
   while (WiFi.status() != WL_CONNECTED){
     Serial.print(".");
     delay(300);
-  }
+  }                        //Success! Connected.
   Serial.println();
   Serial.print("Connected with IP: ");
   Serial.println(WiFi.localIP());
@@ -68,7 +57,7 @@ void setup(){
   /* Declare the Session_Config for user defined session credentials */
   Session_Config config;
 
-  /* Set the session config */
+  /* Set the session config */          //Use your email service provider's SMTP configuration settings. 
   config.server.host_name = SMTP_HOST;
   config.server.port = SMTP_PORT;
   config.login.email = AUTHOR_EMAIL;
@@ -76,7 +65,7 @@ void setup(){
   config.login.user_domain = "";
 
   /*
-  Set the NTP config time
+  Set the NTP config time                        //Configure NTP config time for accurate time stamps, based on your geo position.
   For times east of the Prime Meridian use 0-12
   For times west of the Prime Meridian add 12 to the offset.
   Ex. American/Denver GMT would be -6. 6 + 12 = 18
@@ -90,10 +79,10 @@ void setup(){
   SMTP_Message message;
 
   /* Set the message headers */
-  message.sender.name = F("ESP");
-  message.sender.email = AUTHOR_EMAIL;
-  message.subject = F("ESP Test Email");
-  message.addRecipient(F("Sara"), RECIPIENT_EMAIL);
+  message.sender.name = F("ESP");                   //This will appear as the Name of the sender.
+  message.sender.email = AUTHOR_EMAIL;             
+  message.subject = F("ESP Test Email");            //This will appear as the Subject Line for the email
+  message.addRecipient(F("Recipient"), RECIPIENT_EMAIL);  //This will appear as the Recipient's name (Whether or not it is accurate)
     
   /*Send HTML message*/
   /*String htmlMsg = "<div style=\"color:#2f4468;\"><h1>Hello World!</h1><p>- Sent from ESP board</p></div>";
@@ -104,9 +93,9 @@ void setup(){
 
    
   //Send raw text message
-  String textMsg = "Hello World! - Sent from ESP board";
+  String textMsg = "Hello, there! This is an automated message, sent from my ESP32 microcontrol board. - Sent from ESP board";      //The message content of the email, contained as a string within double quotes, " "
   message.text.content = textMsg.c_str();
-  message.text.charSet = "us-ascii";
+  message.text.charSet = "us-ascii";                                              //Change the character set here. https://www.charset.org/charsets/us-ascii
   message.text.transfer_encoding = Content_Transfer_Encoding::enc_7bit;
   
   message.priority = esp_mail_smtp_priority::esp_mail_smtp_priority_low;
