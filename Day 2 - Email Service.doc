@@ -1,0 +1,150 @@
+Day 2 – Accessing other Web Pages, Formatting Web Pages, and Git Hub 
+
+Read through Day 1 Code: Web Server Soft AP and Web Server Station. 
+
+Comprehend each piece with Walkthrough. 
+
+HTML: 
+
+HTML is the language that is rendered to display a website. It is a formatting and text-output language. 
+
+https://www.w3schools.com/html/default.asp  
+
+CSS:  
+
+With CSS, you can control the color, font, the size of text, the spacing between elements, how elements are positioned and laid out, what background images or background colors are to be used, different displays for different devices and screen sizes, and much more 
+
+https://www.w3schools.com/html/html_css.asp  
+
+Example of CSS in HTML for ESP32 Client Webpage: 
+
+String SendHTML(uint8_t led1stat,uint8_t led2stat){ 
+  String ptr = "<!DOCTYPE html> <html>\n"; 
+  ptr +="<head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n"; 
+  ptr +="<title>LED Control</title>\n"; 
+  ptr +="<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;}\n"; 
+  ptr +="body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;}\n"; 
+  ptr +=".button {display: block;width: 80px;background-color: #3498db;border: none;color: white;padding: 13px 30px;text-decoration: none;font-size: 25px;margin: 0px auto 35px;cursor: pointer;border-radius: 4px;}\n"; 
+  ptr +=".button-on {background-color: #3498db;}\n"; 
+  ptr +=".button-on:active {background-color: #2980b9;}\n"; 
+  ptr +=".button-off {background-color: #34495e;}\n"; 
+  ptr +=".button-off:active {background-color: #2c3e50;}\n"; 
+  ptr +="p {font-size: 14px;color: #888;margin-bottom: 10px;}\n"; 
+  ptr +="</style>\n"; 
+  ptr +="</head>\n"; 
+  ptr +="<body>\n"; 
+  ptr +="<h1>ESP32 Web Server</h1>\n"; 
+  ptr +="<h3>Using Access Point(AP) Mode</h3>\n"; 
+   if(led1stat) 
+  {ptr +="<p>LED1 Status: ON</p><a class=\"button button-off\" href=\"/led1off\">OFF</a>\n";} 
+  else 
+  {ptr +="<p>LED1 Status: OFF</p><a class=\"button button-on\" href=\"/led1on\">ON</a>\n";} 
+ 
+  if(led2stat) 
+  {ptr +="<p>LED2 Status: ON</p><a class=\"button button-off\" href=\"/led2off\">OFF</a>\n";} 
+  else 
+  {ptr +="<p>LED2 Status: OFF</p><a class=\"button button-on\" href=\"/led2on\">ON</a>\n";} 
+ 
+  ptr +="</body>\n"; 
+  ptr +="</html>\n"; 
+  return ptr; 
+} 
+
+Pull Data from Website: 
+
+Need an HTTPClient object to interact with a webpage. 
+
+Declare an object of class HTTPClient. This class will make available methods that will allow us work with the HTTP functionalities without needing to encode functions to treat the low level implementation details. You can check the header file for a list of those methods: https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h#L122  
+
+HTTPClient http; 
+
+Then, call the begin method on the previously declared object, passing as a string parameter the URL where we want to perform the HTTP request. Send the request to a testing website.  
+
+Note: You can directly access the URL in a web browser to check the expected content to be returned. 
+
+http.begin("http://jsonplaceholder.typicode.com/comments?id=10"); //Specify the URL 
+
+To send the request, call the GET method on the http object.  
+
+This methods receives no arguments and returns the HTTP code (success value) of the request, which we will store on a variable for error handling.  
+
+Note that codes lesser than 0 are error codes from the library (you can check the list here) and values greater than zero are standard HTTP return codes: https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h#L36  
+
+If the code is greater than zero, print both the HTTP code returned and the response to our request.  
+
+Call the getString method, which receives no arguments and returns a string with the response. Otherwise, we will print an error message. 
+
+if (httpCode > 0)  
+
+{ //Check for the returning code 
+
+        String payload = http.getString(); 
+
+        Serial.println(httpCode); 
+
+        Serial.println(payload); 
+
+} 
+
+else  
+
+{   
+
+      Serial.println("Error on HTTP request");  
+
+} 
+
+ 
+
+Finally, we will need to call the end method, to ensure the resources are freed. It’s important that we don’t forget this call. 
+
+http.end(); //Free the resources 
+
+With an HTTP object, you can make the following requests at a website: 
+
+POST, GET, PUT, PATCH, DELETE 
+
+ 
+
+Use OpenWeather to pull JSON data 
+
+Open Weather with API syntax documentation https://openweathermap.org/current  
+
+Need an API key to be able to use OpenWeatherMap’s API. The API key is one of the parameters we need to pass in the query string of our HTTP requests 
+
+Log in to OpenWeather.  
+
+Create an account and verity email. 
+
+Navigate to “API Keys”  
+
+Format API call: 
+
+In order to ask the current weather for a specific city, we need to pass a query parameter called q. This parameter receives the city name and country code divided by comma, using ISO 3166 country codes 
+
+q=Louisville,pt 
+
+To finalize, we need to add the API key to our URL. This will correspond to an additional query parameter called APPID, which will have the key we have retrieved after registering on the OpenWeatherMap website. Note that query parameters are separated by an ampersand (“&“). 
+
+ 
+http://api.openweathermap.org/data/2.5/weather?q=Louisville,US,pt&APPID={yourAPIkey} 
+
+Download  
+
+Example API call:  https://api.openweathermap.org/data/2.5/weather?q=Louisville,US,pt&APPID=ded70c154c37972f77d0228456d87d16  
+
+JSON format returned by OpenWeather explained: 
+
+https://openweathermap.org/current  
+
+Download and read code: https://github.com/antmhernandez/ESP32-Basics/blob/main/openWeatherAPICall.inoo  
+
+Use the JSON returned to output weather. 
+
+Parse and format JSON. (See: https://openweathermap.org/current ) 
+
+ 
+
+Access other web pages. Pull data:  https://techtutorialsx.com/2018/03/17/esp32-arduino-getting-weather-data-from-api/  
+
+HTML: See middle of report: https://electropeak.com/learn/create-a-web-server-w-esp32/  
