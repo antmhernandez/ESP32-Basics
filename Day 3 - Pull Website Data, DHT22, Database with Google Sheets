@@ -1,0 +1,220 @@
+Day 3 – Bluetooth, Database, DHT22 
+
+Access other web pages. Pull data:  https://techtutorialsx.com/2018/03/17/esp32-arduino-getting-weather-data-from-api/ 
+
+How to Pull Data from a Website: 
+
+Need an HTTPClient object to interact with a webpage. 
+
+Declare an object of class HTTPClient. This class will make available methods that will allow us work with the HTTP functionalities without needing to encode functions to treat the low level implementation details. You can check the header file for a list of those methods: https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h#L122  
+
+HTTPClient http; 
+
+Then, call the begin method on the previously declared object, passing as a string parameter the URL where we want to perform the HTTP request. Send the request to a testing website.  
+
+Note: You can directly access the URL in a web browser to check the expected content to be returned. 
+
+http.begin("http://jsonplaceholder.typicode.com/comments?id=10"); //Specify the URL 
+
+To send the request, call the GET method on the http object.  
+
+This methods receives no arguments and returns the HTTP code (success value) of the request, which we will store on a variable for error handling.  
+
+Note that codes lesser than 0 are error codes from the library (you can check the list here) and values greater than zero are standard HTTP return codes: https://github.com/espressif/arduino-esp32/blob/master/libraries/HTTPClient/src/HTTPClient.h#L36  
+
+If the code is greater than zero, print both the HTTP code returned and the response to our request.  
+
+Call the getString method, which receives no arguments and returns a string with the response. Otherwise, we will print an error message. 
+
+if (httpCode > 0)  
+
+{ //Check for the returning code 
+
+        String payload = http.getString(); 
+
+        Serial.println(httpCode); 
+
+        Serial.println(payload); 
+
+} 
+
+else  
+
+{   
+
+      Serial.println("Error on HTTP request");  
+
+} 
+
+ 
+
+Finally, we will need to call the end method, to ensure the resources are freed. It’s important that we don’t forget this call. 
+
+http.end(); //Free the resources 
+
+With an HTTP object, you can make the following requests at a website: 
+
+POST, GET, PUT, PATCH, DELETE 
+
+ 
+
+Use OpenWeather to pull JSON data 
+
+Open Weather with API syntax documentation https://openweathermap.org/current  
+
+Need an API key to be able to use OpenWeatherMap’s API. The API key is one of the parameters we need to pass in the query string of our HTTP requests 
+
+Log in to OpenWeather.  
+
+Create an account and verity email. 
+
+Navigate to “API Keys”  
+
+Format API call: 
+
+In order to ask the current weather for a specific city, we need to pass a query parameter called q. This parameter receives the city name and country code divided by comma, using ISO 3166 country codes 
+
+q=Louisville,pt 
+
+To finalize, we need to add the API key to our URL. This will correspond to an additional query parameter called APPID, which will have the key we have retrieved after registering on the OpenWeatherMap website. Note that query parameters are separated by an ampersand (“&“). 
+
+ 
+http://api.openweathermap.org/data/2.5/weather?q=Louisville,US,pt&APPID={yourAPIkey} 
+
+Download  
+
+Example API call:  https://api.openweathermap.org/data/2.5/weather?q=Louisville,US,pt&APPID=ded70c154c37972f77d0228456d87d16  
+
+JSON format returned by OpenWeather explained: 
+
+https://openweathermap.org/current  
+
+Download and read code: https://github.com/antmhernandez/ESP32-Basics/blob/main/openWeatherAPICall.inoo  
+
+Use the JSON returned to output weather. 
+
+Parse and format JSON. (See: https://openweathermap.org/current ) 
+
+ 
+
+Wire up the DHT22. Draw readings and output to serial terminal. 
+
+https://randomnerdtutorials.com/esp32-dht11-dht22-temperature-humidity-sensor-arduino-ide/ 
+
+DHT pin 
+
+Connect to 
+
+1 
+
+3.3V 
+
+2 
+
+Any digital GPIO; also connect a 10k Ohm pull-up resistor 
+
+3 
+
+Don’t connect 
+
+4 
+
+GND 
+
+ 
+
+Add a 10k pullup resistor to the board in parallel with the digital output (GPIO4) and running to 3v3. 
+
+Explain Pull-Up Resistors here: https://www.electronics-tutorials.ws/logic/pull-up-resistor.html (first 3 sections: intro, Pull-Up Resistors, Pull-Up Resistor Application) 
+
+ 
+
+Add 2 Libraries: Sketch > Include Library > Manage Libraries 
+
+DHT sensor library by Adafruit 
+
+Adafruit Unified Sensor library 
+
+Read Code: https://github.com/antmhernandez/ESP32-Basics/blob/main/DHT22-Sensor-Data.ino  
+
+Copy/Paste into Arduino IDE. 9600 baud.  
+
+ 
+
+Write to Google Sheet!!! Store data. Build table and view from web page. https://www.techiesms.com/iot-attendance-system-without-website/  
+
+Create a Google Sheet and give it a memorable title 
+
+Name the sheet used (at the bottom). 1 word, no spaces, lower case. 
+
+Use the first Row to name the data for each Column to be used. 
+
+These will serve as pointers to push data to the Sheet. 
+
+Must be one-word with NO uppercase letters. Hyphen accepted. 
+
+Example: temperature-data-fahrenheit, degfahrenheit 
+
+Note the Sheet ID located in the URL 
+
+Example URL: https://docs.google.com/spreadsheets/d/1BdQzuTeYr4Tf4zwT-LP1f45rfk63oWZTrQ_cIDfgWfgD/edit#gid=0  
+
+Sheet ID = 1BdQzuTeYr4Tf4zwT-LP1f45rfk63oWZTrQ_cIDfgWfgD  
+
+Create a Google App Script that will allow us to push data from the ESP to the Sheet. 
+
+Extensions -> Apps Script (formerly under Tools -> Script Editor). 
+
+Copy/Paste the code below: 
+
+var sheet_id = "YOUR SHEET ID"; 
+var sheet_name = "NAME OF YOUR SHEET"; 
+function doGet(e){ 
+var ss = SpreadsheetApp.openById(sheet_id); 
+var sheet = ss.getSheetByName(sheet_name); 
+var sensor = Number(e.parameter.sensor); 
+var date = Number(e.parameter.date); 
+sheet.appendRow([sensor,date]); 
+} 
+
+Replace “YOUR SHEET ID” and “NAME OF YOUR SHEET”. 
+
+“Save.” 
+
+ “Deploy”. 
+
+“New Deployment”: Select Type: Web app. 
+
+Who can access: “Anyone” 
+
+“Deploy” 
+
+“Authorize Access” 
+
+Select your Google account from prompt and click “Allow”. 
+
+This will deploy the web app and will give you the Deployment ID and web app URL.  
+
+Please copy these and save the Deployment ID and web App URL somewhere safe. 
+
+In the case that a “This app isn’t verified” error is returned while authorizing, click on advanced and ‘Go to your ‘Script_name’(unsafe). 
+
+Test the Google App Script: 
+
+Title the first two column headers (first row) as “date” and “sensor”. 
+
+simply copy and paste the web app URL to any browser and add ?sensor=35&date=1103 to the URL after exec. 
+
+Enter the URL in the URL bar and press enter: 
+
+https://script.google.com/macros/s/AKfycdsafrbg34f524245vv245If7bPy0T0hMmM42X19peNrpxU-lIi-5dghyhnh7gKb47g/exec?sensor=35&date=1103 and press enter 
+
+This should return a page that says, “The script completed but did not return anything.” 
+
+Return to the Google Sheet and view that the values have indeed been added. 
+
+Copy/Paste the “Google-Sheets-send-data.ino” file from Github. 
+
+ 
+
+Use the DHT22 to collect temperature and humidity data. Write this to a Google Sheet. 
