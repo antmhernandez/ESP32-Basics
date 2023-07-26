@@ -1,0 +1,9 @@
+var sheet_id = "YOUR SHEET ID";
+var sheet_name = "NAME OF YOUR SHEET";
+function doGet(e){
+var ss = SpreadsheetApp.openById(sheet_id);
+var sheet = ss.getSheetByName(sheet_name);
+var sensor = Number(e.parameter.sensor);
+var date = Number(e.parameter.date);
+sheet.appendRow([sensor,date]);
+}
