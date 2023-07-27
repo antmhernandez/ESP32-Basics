@@ -1,0 +1,75 @@
+Day 4 – Bluetooth and OTA Updates. 
+
+OTA: The ESP32 board can be encoded “Over the Air” through its Wifi connection. 
+
+The additional OTA Code must be included in EACH sketch that is written to the board. 
+
+The instance OTA Code is not included, the board can no longer receive OTA updates. 
+
+Basic OTA is delivered via the Arduino IDE, over Wifi, to the board. 
+
+Web Updater OTA uses functionality through a web page, served by the ESP32, to add code to the board via Wifi. 
+
+We will use the Web Updater OTA method. The Basic OTA method requires Python 2.7+, a large file, to be installed on your machine. It then uses the Arduino IDE to recognize a ‘ESP32 board port’ for upload. 
+
+Web Updater OTA: 
+
+Download the ESP32 board add-on  
+
+File -> Preferences -> Additional Boards Manager URLs: Add https://dl.espressif.com/dl/package_esp32_index.json (no quotes) 
+
+Tools -> Board -> Board Manager: Search ESP32 by Espressif 
+
+Access the Webupdater OTA code:  
+
+File -> Examples -> ArduinoOTA -> OTAWebUpdater 
+
+Open the file. Change the SSID and PASSWORD values to your Network’s. 
+
+(YES! Arduino comes jam-packed with example code of various kinds!!) 
+
+Upload the code 
+
+Visit the IP address shown 
+
+“admin” and “admin” for username and password 
+
+Download the “OTA-WebUpdate-and-Blink" sketch to a New Arduino project file. 
+
+Change the SSID and Password 
+
+Sketch -> Export Compiled Binary 
+
+This .bin file lives in the Arduino -> [Project Name] folder 
+
+You will upload the .bin file to the web interface for the ESP32 
+
+DO NOT FORGET TO INCLUDE THE OTA CODE. Embed additional code within it. 
+
+More about OTA Updates: https://docs.espressif.com/projects/esp-idf/en/latest/esp32/api-reference/system/ota.html  
+
+ 
+
+Bluetooth! Host Mode: https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/  
+
+ 
+
+Unlike Bluetooth which is always on, BLE remains in sleep mode constantly except for when a connection is initiated. This makes it consume very low power. BLE consumes approximately 1/100th  as much power as Bluetooth (depending on the use case). 
+
+Additionally, BLE supports not only point-to-point communication, but also broadcast mode, and mesh network. Due to its properties, BLE is suitable for applications that need to exchange small amounts of data periodically running on a coin cell 
+
+Load the “bluetooth.ino” file from Github to the ESP32 board. 
+
+Download an app: Bluetooth Serial Terminal (or similar) 
+
+free app called nRF Connect for Mobile from Nordic, it works on Android (Google Play Store) and iOS (App Store). 
+
+Enable your bluetooth adaptor on the device which will connect 
+
+https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/  
+
+ 
+
+Bluetooth may “coexist” with WIFI using the “coexistance module”. 
+
+ 
