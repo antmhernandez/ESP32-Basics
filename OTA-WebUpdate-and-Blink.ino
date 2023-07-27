@@ -1,5 +1,4 @@
- * Complete Project Details https://randomnerdtutorials.com
- */
+ /* Complete Project Details https://randomnerdtutorials.com */
 
 #include <WiFi.h>
 #include <WiFiClient.h>
