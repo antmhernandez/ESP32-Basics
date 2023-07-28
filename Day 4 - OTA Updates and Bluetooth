@@ -50,26 +50,88 @@ More about OTA Updates: https://docs.espressif.com/projects/esp-idf/en/latest/es
 
  
 
-Bluetooth! Host Mode: https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/  
+Bluetooth! Host Mode: https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/ 
 
- 
+Bluetooth = short-range wireless technology standard for exchanging data between fixed and mobile devices over short distances (~33 ft) and for building personal area networks (PAN).  
+
+BLE = Bluetooth Low Energy =  
 
 Unlike Bluetooth which is always on, BLE remains in sleep mode constantly except for when a connection is initiated. This makes it consume very low power. BLE consumes approximately 1/100th  as much power as Bluetooth (depending on the use case). 
 
 Additionally, BLE supports not only point-to-point communication, but also broadcast mode, and mesh network. Due to its properties, BLE is suitable for applications that need to exchange small amounts of data periodically running on a coin cell 
 
-Load the “bluetooth.ino” file from Github to the ESP32 board. 
+ 
 
-Download an app: Bluetooth Serial Terminal (or similar) 
+Parameter 
 
-free app called nRF Connect for Mobile from Nordic, it works on Android (Google Play Store) and iOS (App Store). 
+Conventional Bluetooth 
+
+Low Energy Bluetooth 
+
+Communication 
+
+Bidirectional and Continuous 
+
+Short data transfers, unidirectional 
+
+Range 
+
+Up to 100 m 
+
+Less than 100 m 
+
+Energy Consumption 
+
+Up to 1 W 
+
+10 to 500 mW 
+
+Data rate 
+
+1 – 3 Mbits/s 
+
+125 kbits/s – 2 Mbits/s 
+
+Latency 
+
+100 ms 
+
+6 ms 
+
+Voice capability 
+
+Yes 
+
+No 
+
+ 
+
+Applications of BLE: Fitness Tracker (send small amounts of data), Indoor Positioning (GPS positioning module),  
+
+Load Bluetooth code in Arduino IDE:  
+
+File -> Examples -> Examples for ESP32: BluetoothSerial: SerialToSerialBT 
+
+Load a Bluetooth to Serial app onto a phone or pad. 
+
+nRF Connect for Mobile from Nordic, it works on Android (Google Play Store) and iOS (App Store). 
 
 Enable your bluetooth adaptor on the device which will connect 
 
-https://randomnerdtutorials.com/esp32-bluetooth-classic-arduino-ide/  
+Download Bluetooth Terminal for ios. 
+
+Navigate to Characteristic and send an ASCII message. 
 
  
 
 Bluetooth may “coexist” with WIFI using the “coexistance module”. 
+
+ 
+
+Other Applications of ESP32 
+
+SD Card support (store and retrieve data: text, photo, audio, etc.) 
+
+Audio support (microphone and speaker) 
 
  
